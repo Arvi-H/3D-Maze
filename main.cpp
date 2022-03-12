@@ -1,32 +1,30 @@
 #include <iostream>
 #include <fstream>
 
-#include "MazeInterface.h"
+#include "Maze.h"
 
 using namespace std;
 
 /**
  * Print our 3D maze, replacing 0s with "_" and 1s with "X".
 */
-void printMaze(int height, int width, int layers, ifstream &in, ofstream &out) {
-    int input;
-    
-    for (int i = 0; i < layers; i++) {
-        out << "Layer " << (i+1) << endl;
+ 
 
+void initMaze(Maze maze, int layers, int height, int width, ifstream &in) {
+    int input;
+
+    for (int i = 0; i < layers; i++) {
         for (int j = 0; j < height; j++) {
             for (int k = 0; k < width; k++) {
                 in >> input;
-
-                if (input == 1) {
-                    out << "X" << " ";
-                } else {
-                    out << "_" << " ";
+                
+                if (input == 0) {
+                    maze.setValue(j, k, i, 0);
+                } else if (input == 1) {
+                    maze.setValue(j, k, i, 1);
                 }
             }
-            out << endl;
         }
-        out << endl; // ********** For my sanity, delete before turning it in **********
     }
 }
 
@@ -41,10 +39,17 @@ int main(int argc, char* argv[]) {
     int height, width, layers;
     in >> height >> width >> layers;
     
+    // Maze object
+    Maze maze (height, width, layers);
+
     // Print maze board
     out << "Solve Maze:" << endl;
-    printMaze(height, width, layers, in, out);
+    string mazeLayout = maze.toString();
 
+    cout << mazeLayout << endl;
+    initMaze(maze, layers, height, width, in);
     
-    
+    mazeLayout = maze.toString();
+    cout << mazeLayout << endl;
+
 }   
