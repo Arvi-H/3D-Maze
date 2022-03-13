@@ -58,7 +58,6 @@ public:
     }
     
     bool solveMaze(int i, int j, int k) {
-
         // Out of bounds, hit a wall, or have been down this path before 
         if (((i >= height) || (i < 0) || (j >= width) || (j < 0) || (k >= layers) || (k < 0))) {
             return false;
@@ -106,16 +105,13 @@ public:
             setValue(i, j, k, IN);
             return true; 
         };
-
-
         return false;
     }
-
-
+    
 /**
  * Print 3D maze in a nice format.
 */
-std::string toString() const {
+    std::string toString() const {
     stringstream out;
 
     for (int i = 0; i < layers; i++) {
@@ -152,7 +148,6 @@ std::string toString() const {
     
     return out.str();
 }
-
 };
 
 #endif
