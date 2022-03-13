@@ -8,54 +8,28 @@ using namespace std;
 /**
  * Initalize 3D maze, turning 0s to "_" and 1s to "X".
 */
-void initMaze(Maze maze, int layers, int height, int width, ifstream &in) {
+void initMaze(Maze &maze, int layers, int height, int width, ifstream &in) {
     int input;
 
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-            for (int k = 0; k < layers; k++) {
+    for (int i = 0; i < layers; i++) {
+        for (int j = 0; j < height; j++) {
+            for (int k = 0; k < width; k++) {
                 in >> input;
                  
                 if (input == 0) {
-                    maze.maze[i][j][k] = maze.OPEN;
+                    maze.setValue(j, k, i, maze.OPEN);
                 } else if (input == 1) {
-                    maze.maze[i][j][k] = maze.BLOCKED;
+                    maze.setValue(j, k, i, maze.BLOCKED);
                 }
             }
         }
     } 
 }
-
-/**
- * Print 3D maze in a nice format.
-*/
-void printMaze(Maze maze, int height, int width, int layers, ofstream &out) {
-    int count = 0;
-
-    for (int i = 0; i < layers; i++) {
-        out << "Layer " << (i+1) << endl;
-        for (int j = 0; j < height; j++) {
-            for (int k = 0; k < width; k++) {
-                
-                if (maze.maze[i][j][k] == maze.OPEN) {
-                    out << "_ ";
-                } else if (maze.maze[i][j][k] == maze.BLOCKED) {
-                    out << "X ";
-                }
-            }
-            out << endl;
-        }   
-        out << endl;
-    }
-}
-
+ 
 int main(int argc, char* argv[]) {
     // File streams
-    // ifstream in (argv[1]);
-    // ofstream out (argv[2]);
-    ifstream in ("input.txt");
-    ofstream out ("output.txt");
-
+    ifstream in (argv[1]);
+    ofstream out (argv[2]);
 
     // Maze size
     int height, width, layers;
@@ -69,8 +43,15 @@ int main(int argc, char* argv[]) {
     
     // Print inital maze board
     out << "Solve Maze:" << endl;
-    string mazeLayout = maze.toString();
-    printMaze(maze, height, width, layers, out);
+    out << maze.toString();
 
+    // Print solved maze board
+    if (maze.find_maze_path()) {
+        out << "Solution:" << endl;
+        out << maze.toString();
+    } else {
 
+        out << "No Solution Exists!" << endl;
+        out << maze.toString();
+    }
 }   
